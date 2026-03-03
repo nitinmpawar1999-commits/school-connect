@@ -1,0 +1,32 @@
+import streamlit as st
+import pandas as pd
+import os
+
+# Data save karnyasaathi file che naav
+DATA_FILE = "student_records.csv"
+
+# Jar file nasel tar navin tayar karne
+if not os.path.exists(DATA_FILE):
+    df = pd.DataFrame(columns=["Name", "Class", "Roll No"])
+    df.to_csv(DATA_FILE, index=False)
+
+st.title("SchoolConnect Admin 🏫")
+
+menu = ["Admission", "Attendance", "View Records"]
+choice = st.sidebar.selectbox("Menu", menu)
+
+if choice == "Admission":
+    st.header("नवीन विद्यार्थी नोंदणी [cite: 7]")
+    name = st.text_input("विद्यार्थ्याचे नाव")
+    std = st.selectbox("इयatta", ["1st", "2nd", "3rd", "4th", "5th"])
+    roll = st.text_input("Roll No")
+    
+    if st.button("Save Student Data"):
+        new_data = pd.DataFrame([[name, std, roll]], columns=["Name", "Class", "Roll No"])
+        new_data.to_csv(DATA_FILE, mode='a', header=False, index=False)
+        st.success(f"{name} चा डेटा सुरक्षित सेव्ह झाला आहे! [cite: 22]")
+
+elif choice == "View Records":
+    st.header("विद्यार्थ्यांची यादी [cite: 24]")
+    df = pd.read_csv(DATA_FILE)
+    st.dataframe(df)
